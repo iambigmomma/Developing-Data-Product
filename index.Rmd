@@ -1,0 +1,44 @@
+---
+title       : Developing Data Product- Final Project
+subtitle    : MPG Predictor
+author      : Jeff Fan
+job         : 
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## The background of MPG Predictor
+
+Background: It is just a simple implementation for shinyApp. I run the regression model 
+based on the mtcars dataset in R. And using the model to predict user's car mpg.Just a simple app:)
+Dependency:
+```{r, results='hide'}
+library(shiny)
+library(MASS)
+library(datasets)
+data(mtcars)
+```
+--- .class #id 
+## How we get the model?
+First, we should using all the variables in this dataset to make a regression model,
+Then we gonna to using stepwise algorithm for this dataset to narrow down the primary factors for mpg,
+```{r, results='hide'}
+model_all <- glm(mpg ~ as.factor(gear) + as.factor(carb) + as.factor(vs) + as.factor(cyl)+as.factor(am)+ disp + hp + drat + wt + qsec, data = mtcars)
+stepwise_regression <- stepAIC(model_all, direction = "both")
+
+```
+--- .class #id 
+## The final model
+The final model and estimate intercepet is shown below,
+```{r}
+stepwise_regression$coefficients
+final <- glm(mpg ~  as.factor(cyl) + as.factor(am) + hp + wt, data = mtcars)
+```
+--- .class #id 
+## Try yourself!
+Input your car's information and clicked the "Submit" button, you could see the mpg is shown!
+
